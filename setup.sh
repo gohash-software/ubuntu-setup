@@ -83,9 +83,10 @@ install_snaps() {
 	snap install discord spotify bitwarden onlyoffice-desktopeditors
 }
 
-uninstall_useless_programs() {
+cleanup() {
 	info "Removing programs we don't need"
 	sudo apt remove --purge -y libreoffice-* rhythmbox totem
+	snap remove firefox
 }
 
 update_system
@@ -93,7 +94,7 @@ pre_hooks
 install_standard
 install_browsers
 install_snaps
-uninstall_useless_programs
+cleanup
 
 info "Removing stale packages and libraries..."
 sudo apt autoremove
