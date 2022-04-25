@@ -17,37 +17,37 @@ MAGENTA="$(tput setaf 5 2>/dev/null || printf '')"
 NO_COLOR="$(tput sgr0 2>/dev/null || printf '')"
 
 info() {
-  printf '%s\n' "${BOLD}${GREY}>${NO_COLOR} $*"
+	printf '%s\n' "${BOLD}${GREY}>${NO_COLOR} $*"
 }
 
 warn() {
-  printf '%s\n' "${YELLOW}! $*${NO_COLOR}"
+	printf '%s\n' "${YELLOW}! $*${NO_COLOR}"
 }
 
 error() {
-  printf '%s\n' "${RED}x $*${NO_COLOR}" >&2
+	printf '%s\n' "${RED}x $*${NO_COLOR}" >&2
 }
 
 completed() {
-  printf '%s\n' "${GREEN}✓${NO_COLOR} $*"
+	printf '%s\n' "${GREEN}✓${NO_COLOR} $*"
 }
 
 has() {
-  command -v "$1" 1>/dev/null 2>&1
+	command -v "$1" 1>/dev/null 2>&1
 }
 
 verify_shell_is_posix_or_exit() {
-  if [ -n "${ZSH_VERSION+x}" ]; then
-    error "Running installation script with \`zsh\` is known to cause errors."
-    error "Please use \`sh\` instead."
-    exit 1
-  elif [ -n "${BASH_VERSION+x}" ] && [ -z "${POSIXLY_CORRECT+x}" ]; then
-    error "Running installation script with non-POSIX \`bash\` may cause errors."
-    error "Please use \`sh\` instead."
-    exit 1
-  else
-    true  # No-op: no issues detected
-  fi
+	if [ -n "${ZSH_VERSION+x}" ]; then
+		error "Running installation script with \`zsh\` is known to cause errors."
+		error "Please use \`sh\` instead."
+		exit 1
+	elif [ -n "${BASH_VERSION+x}" ] && [ -z "${POSIXLY_CORRECT+x}" ]; then
+		error "Running installation script with non-POSIX \`bash\` may cause errors."
+		error "Please use \`sh\` instead."
+		exit 1
+	else
+		true  # No-op: no issues detected
+	fi
 }
 
 pre_hooks() {
