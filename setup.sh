@@ -66,7 +66,7 @@ update_system() {
 
 install_standard() {
 	info "Installing suite of standard programs..."
-	sudo apt install neovim fish dconf-editor gnome-tweaks apt-transport-https curl git inxi htop chrome-gnome-shell gnome-shell-extension-prefs -y
+	sudo apt install neovim fish dconf-editor gnome-tweaks apt-transport-https curl git inxi htop chrome-gnome-shell gnome-shell-extension-prefs vlc -y
 }
 
 # install brave and google-chrome
