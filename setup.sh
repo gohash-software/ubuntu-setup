@@ -103,7 +103,7 @@ install_snaps() {
 cleanup() {
 	info "Removing programs we don't need"
 	sudo apt remove --purge -y libreoffice-* rhythmbox totem
-	snap remove firefox
+	sudo snap remove firefox
 }
 
 # execute all the functions
