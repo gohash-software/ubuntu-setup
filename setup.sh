@@ -1,4 +1,7 @@
-#!/usr/bin/bash
+#!/usr/bin/env sh
+
+# Quick and dirty script to install all the basic software
+# the gohash developer team needs.
 
 set -eu
 printf '\n'
@@ -31,6 +34,20 @@ completed() {
 
 has() {
   command -v "$1" 1>/dev/null 2>&1
+}
+
+verify_shell_is_posix_or_exit() {
+  if [ -n "${ZSH_VERSION+x}" ]; then
+    error "Running installation script with \`zsh\` is known to cause errors."
+    error "Please use \`sh\` instead."
+    exit 1
+  elif [ -n "${BASH_VERSION+x}" ] && [ -z "${POSIXLY_CORRECT+x}" ]; then
+    error "Running installation script with non-POSIX \`bash\` may cause errors."
+    error "Please use \`sh\` instead."
+    exit 1
+  else
+    true  # No-op: no issues detected
+  fi
 }
 
 pre_hooks() {
@@ -89,6 +106,8 @@ cleanup() {
 	snap remove firefox
 }
 
+# execute all the functions
+verify_shell_is_posix_or_exit
 update_system
 pre_hooks
 install_standard
