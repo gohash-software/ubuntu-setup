@@ -97,7 +97,7 @@ install_browsers() {
 
 install_snaps() {
 	info "Installing 3rd party software via snap packages..."
-	snap install discord spotify bitwarden onlyoffice-desktopeditors
+	sudo snap install discord spotify bitwarden onlyoffice-desktopeditors
 }
 
 cleanup() {
