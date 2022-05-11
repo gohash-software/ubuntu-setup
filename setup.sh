@@ -4,6 +4,30 @@
 # the gohash developer team needs.
 
 set -eu
+
+debian_packages=(
+	"neovim"
+	"fish"
+	"dconf-editor"
+	"gnome-tweaks"
+	"apt-transport-https"
+	"curl"
+	"git"
+	"inxi"
+	"htop"
+	"chrome-gnome-shell"
+	"gnome-shell-extension-prefs"
+	"vlc"
+)
+
+snap_packages=(
+	"discord"
+	"spotify"
+	"bitwarden"
+	"onlyoffice-desktopeditors"
+	"notion-snap"
+)
+
 printf '\n'
 
 BOLD="$(tput bold 2>/dev/null || printf '')"
@@ -66,7 +90,12 @@ update_system() {
 
 install_standard() {
 	info "Installing suite of standard programs..."
-	sudo apt install neovim fish dconf-editor gnome-tweaks apt-transport-https curl git inxi htop chrome-gnome-shell gnome-shell-extension-prefs vlc -y
+	for d in ${debian_packages[@]}; do
+		if ! has $d; then
+			info "Installing "$d""
+			sudo apt install $d -y
+		fi
+	done
 }
 
 # install brave and google-chrome
@@ -97,24 +126,47 @@ install_browsers() {
 
 install_snaps() {
 	info "Installing 3rd party software via snap packages..."
-	sudo snap install discord spotify bitwarden onlyoffice-desktopeditors
+	for s in ${snap_packages[@]}; do
+		if ! has $s; then
+			info "Installing "$s""
+			sudo snap install $s
+		fi
+	done
 }
+
+write_profile() {
+	if [ ! -d ~/.local/bin ]; then
+		mkdir -p ~/.local/bin
+	fi
+
+	if [ ! -f ~/.profile ]; then
+		touch ~/.profile
+	fi
+
+	echo "export EDITOR=\"nvim\"" >> ~/.profile
+	echo "export VISUAL=\"nvim\"" >> ~/.profile
+	echo "export TERMINAL=\"gnome-terminal\"" >> ~/.profile
+	echo "export BROWSER=\"google-chrome\"" >> ~/.profile
+	echo "export READER=\"evince\"" >> ~/.profile
+	echo "PATH=~/.local/bin:$PATH" >> ~/.profile
+}
+
 
 cleanup() {
 	info "Removing programs we don't need"
 	sudo apt remove --purge -y libreoffice-* rhythmbox totem
 	sudo snap remove firefox
+	info "Removing stale packages and libraries..."
+	sudo apt autoremove
 }
 
 # execute all the functions
-verify_shell_is_posix_or_exit
 update_system
 pre_hooks
 install_standard
 install_browsers
 install_snaps
+write_profile
 cleanup
 
-info "Removing stale packages and libraries..."
-sudo apt autoremove
 completed "Done..."
